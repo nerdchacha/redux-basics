@@ -1,31 +1,31 @@
 import React, { Component } from 'react'
-import store from './store'
 import { INCREMENT, DECREMENT } from './reducer'
+import { connect } from 'react-redux'
 
 class App extends Component {
-  constructor() {
-    super()
-    this.state = { count: 0 }
-    store.subscribe(() => {
-      const state = store.getState()
-      this.setState({ count: state })
-    })
-  }
-  increment = () => {
-    store.dispatch({type: INCREMENT})
-  }
-  decrement = () => {
-    store.dispatch({type: DECREMENT})
-  }
   render() {
+    const { count, increment, decrement } = this.props
     return (
         <div>
-          <div>Count : {this.state.count}</div>
-          <button onClick={this.increment}>+</button>
-          <button onClick={this.decrement}>-</button>
+          <div>Count : {count}</div>
+          <button onClick={increment}>+</button>
+          <button onClick={decrement}>-</button>
         </div>
     )
   }
 }
 
-export default App
+const mapStateToProps = (state) => {
+  return {
+    count: state
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    increment: () => dispatch({type: INCREMENT}),
+    decrement: () => dispatch({type: DECREMENT})
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)
